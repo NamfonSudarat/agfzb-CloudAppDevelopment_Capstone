@@ -14,7 +14,7 @@ class CarMake(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 # <HINT> Create a Car Model model `class CarModel(models.Model):`:
 # - Many-To-One relationship to Car Make model (One Car Make has many Car Models, using ForeignKey field)
 # - Name
@@ -27,10 +27,12 @@ class CarModel(models.Model):
     SEDAN = 'sedan'
     WAGON = 'wagon'
     SUV = 'suv'
+    BMW = 'bmw'
     TYPE_CHOICES = [
         (SEDAN, 'sedan'),
         (WAGON, 'wagon'),
-        (SUV, 'suv')
+        (SUV, 'suv'),
+        (BMW, 'bmw')
         ]
 
     car_model = models.ForeignKey(CarMake, on_delete=models.CASCADE)
