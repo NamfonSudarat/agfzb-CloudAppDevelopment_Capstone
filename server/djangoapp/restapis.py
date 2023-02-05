@@ -10,18 +10,18 @@ from ibm_watson.natural_language_understanding_v1 import Features, SentimentOpti
 # Create a `get_request` to make HTTP GET requests
 # e.g., response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
 #                                     auth=HTTPBasicAuth('apikey', api_key))
-def get_request(url, **kwargs):
-    print(kwargs)
-    print("GET from {} ".format(url))
+import requests
+import json
+
+def get_request(url, headers={'Content-Type': 'application/json'}, params=None, auth=None):
     try:
-        response = requests.get(url, headers={'Content-Type': 'application/json'},
-                                    params=kwargs)
-    except:
-        print("Network exception occurred")
-    status_code = response.status_code
-    print("With status {} ".format(status_code))
-    json_data = json.loads(response.text)
-    return json_data
+        response = requests.get(url, headers=headers, params=params, auth=auth)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print("Error: {}".format(e))
+        return None
+
 
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
@@ -78,8 +78,8 @@ def get_dealer_reviews_from_cf(url, **kwargs):
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative
 def analyze_review_sentiments(dealerreview):
-    url = 'https://api.eu-de.natural-language-understanding.watson.cloud.ibm.com/instances/73a84a1a-f616-4b0a-8559-f431d3cd765b'
-    api_key = 'TIabac5h19h1BS2qkStYfvbpWqK95QiI05akx41fPzxV'
+    url = 'https://api.au-syd.language-translator.watson.cloud.ibm.com/instances/b0de95df-4984-434f-8832-e0eb4a435d4e'
+    api_key = 'TAhb2rXghuMMZ8uU8OSx_yM_3G1o1apGBXnnm8g9BdmD'
 
     authenticator = IAMAuthenticator(api_key)
     natural_language_understanding = NaturalLanguageUnderstandingV1(
