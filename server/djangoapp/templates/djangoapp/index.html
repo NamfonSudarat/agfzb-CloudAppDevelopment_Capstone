@@ -1,82 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <title>Dealership Review</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
-
-</head>
-
-    <body>
-    <!-- Remove this line the first time you edit this file -->
+    <head>
+        <meta charset="UTF-8">
+        <title>Dealership Review</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+        <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
     
+    </head>
+    <body>
     <!--Add a nav bar here -->
-    <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                  <a class="navbar-brand" href="#">Dealership Review</a>
-                </div>
-                <ul class="nav navbar-nav navbar-right">
-                    {% if user.is_authenticated %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Best Cars</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/djangoapp">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/djangoapp/about">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/djangoapp/contact">Contact Us</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" style="color: rgb(43, 238, 238);" href="#">{{ user.username }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  style="color: rgb(43, 238, 238);" href="logout/">Logout</a>
+                </li>
+                {% else %}
                     <li>
-                        <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
-                        <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                            <a class="btn btn-link" href="/djangoapp/login/">Sign In</a>
+                            <a class="btn btn-link" href="/djangoapp/signup/">Sign Up</a>
                     </li>
-                    {% else %}
-                    <li>
-                        <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
-                            {% csrf_token %}
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Username" name="username" >
-                                <input type="password" class="form-control" placeholder="Password" name="psw" >
-                                <button class="btn btn-primary" type="submit">Login</button>
-                                <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
-                            </div>
-                        </form>
-                    </li>
-                    {% endif %}
-                </ul>
-            </div>
+                {% endif %}
+            </ul>
+        </div>
     </nav>
-    <!--Add a dealer table here -->
-    <table class="table" id="table" data-filter-control="true">
-        <thead>
-            <tr>
-                <th data-field="id">ID</th>
-                <th data-field="name">Dealer Name</th>
-                <th data-field="city">City</th>
-                <th data-field="address">Address</th>
-                <th data-field="zip">Zip</th>
-                <th data-field="st" data-filter-control="select">State</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for dealer in dealerships %}
-                <tr>
-                    <td>{{dealer.id}}</td>
-                    <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
-                    <td>{{dealer.city}}</td>
-                    <td>{{dealer.address}}</td>
-                    <td>{{dealer.zip}}</td>
-                    <td>{{dealer.st}}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
+  <!--dealer table here --> 
+    <div class="container">
+    <table class="table table-striped" id="table" data-filter-control="true" style="margin-top: 3%; margin-bottom: 3%;">
+       <thead>
+               <tr>
+                   <th scope="col">ID</th>
+                   <th scope="col">Dealer Name</th>
+                   <th scope="col">City</th>
+                   <th scope="col">Address</th>
+                   <th scope="col">Zip</th>
+                   <th data-field="state" data-filter-control="select">State</th>
+               </tr>
+           </thead>
+       <tbody>
+           {% for dealer in dealerships%}
+               <tr>
+                   <td style="padding: 2%;">{{dealer.id}}</td>
+                   <td style="padding: 2%;"><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
+                   <td style="padding: 2%;">{{dealer.city}}</td>
+                   <td style="padding: 2%;">{{dealer.address}}</td>
+                   <td style="padding: 2%;">{{dealer.zip}}</td>
+                   <td style="padding: 2%;">{{dealer.st}}</td>
+               </tr>
+           {% endfor %}
+       </tbody>
     </table>
+    </div>
+    </body>
 
-</body>
+    <script>
+        $(function() {
+            $('#table').bootstrapTable()
+        })
+    </script>
 
-<script>
-  $(function() {
-    $('#table').bootstrapTable()
-  })
-</script>
+<footer class="text-center text-lg-start bg-light text-muted">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+      <!-- Left -->
+      <div class="me-5 d-none d-lg-block">
+        <span>Get connected with us on social networks:</span>
+      </div>
+      <!-- Left -->
+  
+      <!-- Right -->
+      <div>
+        <a href="" class="me-4 text-reset">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+          <i class="fab fa-google"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+  
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              <i class="fas fa-gem me-3"></i>Company name
+            </h6>
+            <p>
+              Here you can use rows and columns to organize your footer content. Lorem ipsum
+              dolor sit amet, consectetur adipisicing elit.
+            </p>
+          </div>
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              Products
+            </h6>
+            <p>
+              <a href="#!" class="text-reset">Angular</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">React</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Vue</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Laravel</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              Useful links
+            </h6>
+            <p>
+              <a href="#!" class="text-reset">Pricing</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Settings</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Orders</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Help</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+            <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+            <p>
+              <i class="fas fa-envelope me-3"></i>
+              info@example.com
+            </p>
+            <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
+            <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
 
 </html>
